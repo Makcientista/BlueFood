@@ -14,14 +14,25 @@ public class RestauranteService {
 	@Autowired //to provide an instance when I use this class
 	private RestauranteRepository restauranteRepository;
 
-	public void saveRestaurente(Restaurante restaurente) throws ValidationException {
-		
-		if (!validateEmail(restaurente.getEmail(), restaurente.getId())) {
+	public void saveRestaurante(Restaurante restaurante) throws ValidationException {		
+		if (!validateEmail(restaurante.getEmail(), restaurante.getId())) {
 			throw new ValidationException("O e-mail está duplicado");
 		}
 		
 		
-		restauranteRepository.save(restaurente);
+		if(restaurante.getId() != null) {
+			Restaurante restauranteDB = restauranteRepository.findById(restaurante.getId()).orElseThrow();
+			restaurante.setSenha(restauranteDB.getSenha());
+			
+		}else {
+			restaurante.encryptPassword();			
+			restaurante = restauranteRepository.save(restaurante);
+			restaurante.setLogotipoFileName();
+			//TODO: Upload
+		}
+		
+		
+		
 	}
 	
 	private boolean validateEmail(String email, Integer id){
