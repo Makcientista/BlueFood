@@ -16,6 +16,6 @@ public class ControllerHelper {
 
 	public static void addCategoriasToRequest(CategoriaRestauranteRepository repository, Model model) {
 		List<CategoriaRestaurante> categorias = repository.findAll(Sort.by("nome"));
-		model.addAttribute("categorias");
+		model.addAttribute("categorias", categorias);
 	}
 }

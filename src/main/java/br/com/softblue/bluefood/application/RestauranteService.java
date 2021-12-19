@@ -13,6 +13,9 @@ public class RestauranteService {
 
 	@Autowired //to provide an instance when I use this class
 	private RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	private ImageService imageService;
 
 	public void saveRestaurante(Restaurante restaurante) throws ValidationException {		
 		if (!validateEmail(restaurante.getEmail(), restaurante.getId())) {
@@ -28,6 +31,7 @@ public class RestauranteService {
 			restaurante.encryptPassword();			
 			restaurante = restauranteRepository.save(restaurante);
 			restaurante.setLogotipoFileName();
+			imageService.uploadLogotipo(restaurante.getLogotipoFile(), restaurante.getLogotipo());
 			//TODO: Upload
 		}
 		
